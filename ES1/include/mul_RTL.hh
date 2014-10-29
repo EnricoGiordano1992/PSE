@@ -10,32 +10,36 @@ SC_MODULE(mul_RTL){
 
 //numeri di input da moltiplicare
   sc_in<sc_vcl<64> >   	number_a;
-  sc_in<sc_vcl<32> >  	number_b;
+  sc_in<sc_vcl<64> >  	number_b;
 
+//flag di output per sapere quando e' pronto l'output
   sc_out<sc_uint<1> >   result_isready;
-  sc_in<bool>           reset;
-  sc_in< sc_dt::sc_logic > clk;
 
-  typedef enum {Reset_ST, ST_0, ST_1, ST_2, ST_3, ST_4} STATES;
+  sc_out<sc_vcl<64> >  		result;
+  sc_in<bool>           	reset;
+  sc_in< sc_dt::sc_logic > 	clk;
+
+  typedef enum {SR, S0, S1, S2, S3, S4, S5, S6, S7, S8, S9} STATES;
 
   sc_signal<STATES> STATUS, NEXT_STATUS;
-  sc_signal<sc_uint<32> > Rem;
-  sc_signal<sc_uint<32> > Root;
-  sc_signal<sc_uint<32> > Number;
-  sc_signal<sc_uint<5> >  Counter;
 
-  void elaborate_SQRT(void);
-  void elaborate_SQRT_FSM(void);
+  sc_signal<sc_vcl<64> >   	vcl_number_a;
+  sc_signal<sc_vcl<64> >  	vcl_number_b;
+  sc_signal<sc_vcl<64> >  	vcl_result;
 
-  SC_CTOR(root_RTL){
-    SC_METHOD(elaborate_SQRT_FSM);
+
+  void elaborate_mul(void);
+  void elaborate_mul_FSM(void);
+
+  SC_CTOR(mul_RTL){
+    SC_METHOD(elaborate_mul_FSM);
     sensitive << reset.neg();
     sensitive << clk.pos();
 
      
 
-    SC_METHOD(elaborate_SQRT);
-    sensitive << STATUS << number_isready << number_port << Counter;
+    SC_METHOD(elaborate_mul);
+    sensitive << STATUS << isready << number_a << number_b;
   };
 };
 
