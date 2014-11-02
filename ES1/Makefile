@@ -24,11 +24,11 @@ obj/main_$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).o: src/main_$(DESIGN_NAME)_$(ABSTRA
 	@echo Building $@
 	$(CXX) -g $(CFLAGS) $(INCDIR) -o $@ $< 
 
-obj/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL)_testbench.o: src/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL)_testbench.cc include/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL)_testbench.hh
+obj/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL)_testbench.o: src/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL)_testbench.cc include/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL)_testbench.hh include/support.hh
 	@echo Building $@
 	$(CXX) -g $(CFLAGS) $(INCDIR) -o $@ $< 
 
-obj/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).o: src/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).cc include/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).hh
+obj/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).o: src/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).cc include/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).hh include/support.hh
 	@echo Building $@
 	$(CXX) -g $(CFLAGS) $(INCDIR) -o $@ $<
 
