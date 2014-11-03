@@ -1,56 +1,58 @@
 #include "mul_RTL_testbench.hh"
-/*
-  mul_RTL_testbench::mul_RTL_testbench(sc_module_name name_)
+#include "support.hh"
+
+mul_RTL_testbench::mul_RTL_testbench(sc_module_name name_)
 : sc_module(name_)
 {
 
-  SC_THREAD(run);
-  sensitive << clk.pos();
+	SC_THREAD(run);
+	sensitive << clk.pos();
 
-  SC_THREAD(clk_gen);
+	SC_THREAD(clk_gen);
 }
 
 void mul_RTL_testbench::clk_gen()
 {
-  while( true )
-  {
-    clk.write( sc_dt::SC_LOGIC_1 );
-    wait(PERIOD / 2, sc_core::SC_NS);
-    clk.write( sc_dt::SC_LOGIC_0 );
-    wait(PERIOD / 2, sc_core::SC_NS);
-  }
+	while( true )
+	{
+		clk.write( sc_dt::SC_LOGIC_1 );
+		wait(PERIOD / 2, sc_core::SC_NS);
+		clk.write( sc_dt::SC_LOGIC_0 );
+		wait(PERIOD / 2, sc_core::SC_NS);
+	}
 }
 
 void mul_RTL_testbench::run()
 {
 
-  sc_uint<32> temp_data_in, result = 0;
+	double numero1, numero2, new_result = 0;
 
-  cout<<"Calculate the square root of 128  numbers!"<<endl;
+	cout<<"Calcolo la moltiplicazione tra due double!"<<endl;
 
-  for (int i = 1; i <= 128; i++){
-    temp_data_in = (rand() % 256);
+	numero1 = 1.23;
+	numero2 = 1.3;
 
-    cout<<"\tThe square root of "<<temp_data_in;
+	cout << "\t " << numero1 << " * " << numero2 << endl;
 
-    reset_to_RTL.write(1);
-    p_Out_data.write(temp_data_in);
+	reset.write(true);
+	number_a.write(doubleToLogicVector(numero1));
+	number_b.write(doubleToLogicVector(numero2));
 
-    p_Out_enable.write(1);
-    wait();
+	isready.write(1);
+	wait();
 
-    while(p_In_enable.read() != 1) wait();
-    result=p_In_data.read();
-    cout << "\t is: " << result << endl;
+	while(result_isready.read() != 1) wait();
+	new_result=logicVectorToDouble(result.read());
+	cout << "\t = " << result << endl;
 
-  }
 
-  reset_to_RTL.write(0);
-  p_Out_enable.write(0);
-  p_Out_data.write(0);
+	reset.write(0);
+	isready.write(0);
+	number_a.write(0);
+	number_b.write(0);
 
-  sc_stop();
+	sc_stop();
 
 }
-*/
+
 

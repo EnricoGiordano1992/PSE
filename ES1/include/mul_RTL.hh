@@ -34,6 +34,9 @@ SC_MODULE(mul_RTL){
 	//normalizzato?
 	sc_signal<bool >		 normalizzato;
 
+
+	/////////////////////
+
 	void elaborate_mul(void);
 	void elaborate_mul_FSM(void);
 
