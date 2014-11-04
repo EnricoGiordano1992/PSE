@@ -3,9 +3,12 @@
 void mul_RTL :: elaborate_mul_FSM(void){
 
 	//variabili interne
-	static sc_lv<11> exp1, exp2, exp_tot;
+	static sc_lv<11> exp1, exp2;
+	static sc_lv<64> exp_tot;
+
 	static sc_lv<53> mantissa1, mantissa2;
-	static sc_lv<64> mantissa_tot;
+	static sc_lv<128> mantissa_tot;
+
 	static sc_lv<1>  sign1, sign2, sign_tot;
 
 	sc_lv<64> result_tot;
@@ -22,14 +25,14 @@ void mul_RTL :: elaborate_mul_FSM(void){
 		switch(STATUS){
 		//allo stato di reset non fa niente
 		case SR:
-			result.write(0);
+			out_result.write(0);
 			result_isready.write(0);
 
 			break;
 
 			//preparazione del sistema
 		case S0:
-			result.write(0);
+			out_result.write(0);
 			result_isready.write(0);
 			vcl_number_a.write(0);
 			vcl_number_b.write(0);
@@ -69,17 +72,21 @@ void mul_RTL :: elaborate_mul_FSM(void){
 		case S3:
 			mantissa_tot = static_cast< sc_uint<53> >( mantissa1 ) * static_cast< sc_uint<53> >( mantissa2 );
 
-			cout << mantissa1.range(52,0) << endl;
-			cout << mantissa2.range(52,0) << endl;
-			cout << mantissa_tot.range(63,0) << endl;
-
 			break;
 
-			//normalizzo il risultato
+			//normalizzo il risultato: 2 controlli
 		case S4:
-			if(mantissa_tot[0] != '1'){
-				mantissa_tot << 1;
-				exp_tot = static_cast< sc_uint<11> >( exp_tot )++;
+			//controllo che non ci siano numeri dopo il 53-esimo bit
+			if(static_cast< sc_biguint< 128 > > (mantissa_tot).range(127,53) != 0){
+
+				mantissa_tot = mantissa_tot >> 1;
+				static_cast< sc_uint<11> >( exp_tot )++;
+
+			}
+
+			else if(mantissa_tot[52] != '1'){
+				mantissa_tot  = mantissa_tot << 1;
+				exp_tot = static_cast< sc_uint<11> >( exp_tot )--;
 			}
 
 			break;
@@ -93,12 +100,12 @@ void mul_RTL :: elaborate_mul_FSM(void){
 
 			//?
 		case S6:
-
+			//arrotondare (ma è stato gia' fatto, il bit di precisione e' gia' andato perso)
 			break;
 
 			//devo normalizzare ancora?
 		case S7:
-			if(mantissa_tot[0] == '1')
+			if((static_cast< sc_biguint<128> > (mantissa_tot).range(127,53) == 0) && (mantissa_tot[52] == '1'))
 				normalizzato.write( true );
 			else
 				normalizzato.write( false );
@@ -115,9 +122,10 @@ void mul_RTL :: elaborate_mul_FSM(void){
 
 			result_tot.range(63,63) = sign_tot ;
 			result_tot.range(62,52) = exp_tot ;
-			result_tot.range(51,0) = mantissa_tot ;
+			result_tot.range(51,0) = mantissa_tot.range(51,0) ;
 
-			vcl_result.write(result_tot);
+			out_result.write(result_tot);
+			result_isready.write(1);
 
 			break;
 

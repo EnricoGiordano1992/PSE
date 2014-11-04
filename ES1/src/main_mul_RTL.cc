@@ -23,7 +23,7 @@ int sc_main(int argc, char **argv)
   i_mul_RTL.isready(p_Out_enable);
   i_mul_RTL.number_a(p_In_data1);
   i_mul_RTL.number_b(p_In_data2);
-  i_mul_RTL.result(p_result);
+  i_mul_RTL.out_result(p_result);
   i_mul_RTL.result_isready(p_In_enable);
   
   i_src_RTL.clk(clock);

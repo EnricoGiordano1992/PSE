@@ -32,7 +32,10 @@ void mul_RTL_testbench::run()
 	numero1 = 1.23;
 	numero2 = 1.3;
 
-	cout << "\t " << numero1 << " * " << numero2 << endl;
+	cout << endl;
+	cout << "\t " << numero1 << " \t * " << endl;
+	cout << "\t " << numero2 << " \t = " << endl;
+	cout << "-----------------------" << endl;
 
 	reset.write(true);
 	number_a.write(doubleToLogicVector(numero1));
@@ -42,8 +45,8 @@ void mul_RTL_testbench::run()
 	wait();
 
 	while(result_isready.read() != 1) wait();
-	new_result=logicVectorToDouble(result.read());
-	cout << "\t = " << result << endl;
+	new_result = logicVectorToDouble(result.read());
+	cout << "\t " << new_result << endl;
 
 
 	reset.write(0);

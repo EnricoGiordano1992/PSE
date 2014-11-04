@@ -15,7 +15,7 @@ SC_MODULE(mul_RTL){
 	//flag di output per sapere quando e' pronto l'output
 	sc_out<sc_uint<1> >   result_isready;
 
-	sc_out<sc_lv<64> >  		result;
+	sc_out<sc_lv<64> >  		out_result;
 
 
 	sc_in<bool>           		reset;
