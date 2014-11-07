@@ -154,8 +154,8 @@ void mul_RTL :: elaborate_mul_FSM(void){
 			if(((static_cast< sc_biguint<128> > (mantissa_tot).range(127,53) == 0) && (mantissa_tot[52] == '1')))
 				normalizzato.write( true );
 			else {
-				if((static_cast< sc_biguint<128> > (mantissa_tot).range(127,53) == 0) && (static_cast< sc_biguint< 128 > > (mantissa_tot).range(52,0)) == 0)
-					normalizzato.write( true );
+				if((static_cast< sc_biguint<128> > (mantissa_tot).range(127,53) == 0) && ((static_cast< sc_biguint< 128 > > (mantissa_tot).range(52,0)) == 0)){
+					normalizzato.write( true ); }
 				else
 					normalizzato.write( false );
 			}
@@ -171,8 +171,10 @@ void mul_RTL :: elaborate_mul_FSM(void){
 
 			result_tot.range(63,63) = sign_tot ;
 			result_tot.range(62,52) = exp_tot ;
+//			mantissa_tot = mantissa_tot << 1;
+
 			result_tot.range(51,0) = mantissa_tot.range(51,0) ;
-//			result_tot[51] = '1';
+//			result_tot[52] = '1';
 
 			out_result.write(result_tot);
 			result_isready.write(1);
