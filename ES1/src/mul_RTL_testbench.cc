@@ -29,8 +29,8 @@ void mul_RTL_testbench::run()
 
 	cout<<"Calcolo la moltiplicazione tra due double!"<<endl;
 
-	numero1 = 1.23;
-	numero2 = 1.3;
+	numero1 = 1.5;
+	numero2 = 1.5;
 
 	cout << endl;
 	cout << "\t " << numero1 << " \t * " << endl;

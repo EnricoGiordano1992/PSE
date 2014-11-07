@@ -21,13 +21,14 @@ SC_MODULE(mul_RTL){
 	sc_in<bool>           		reset;
 	sc_in< sc_dt::sc_logic > 	clk;
 
-	typedef enum {SR, S0, S0I, S1, S2, S3, S4, S5, S6, S7, S8, S9} STATES;
+	typedef enum {SR, S0, S0I, S1, S2, S3, S31, S4, S5, S6, S7, S8, S9} STATES;
 
 	sc_signal<STATES> STATUS, NEXT_STATUS;
 
 	sc_signal<sc_lv<64> >   	vcl_number_a;
 	sc_signal<sc_lv<64> >  		vcl_number_b;
 	sc_signal<sc_lv<64> >  		vcl_result;
+	sc_signal<bool>				end_mantissa;
 
 	//overflow?
 	sc_signal<bool>				error;
