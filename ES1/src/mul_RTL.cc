@@ -64,8 +64,12 @@ void mul_RTL :: elaborate_mul_FSM(void){
 			counter = 0;
 			mantissa_tot = "0";
 
+			cout << "numero 1: " << number_a.read() << endl;
+			cout << "numero 2: " << number_b.read() << endl;
 			cout << "mantissa1:" << mantissa1.range(52,0) << endl;
 			cout << "mantissa2:" << mantissa1.range(52,0) << endl;
+			cout << "exp1: " << exp1 << endl;
+			cout << "exp2: " << exp2 << endl;
 
 			break;
 
@@ -99,9 +103,9 @@ void mul_RTL :: elaborate_mul_FSM(void){
 
 			if(mantissa2[counter] == '1') {
 
-//				buffer.range(counter + 52, counter) = static_cast< sc_biguint< 128 > > (mantissa_tot).range(counter + 52, counter) + static_cast< sc_uint<53> >(mantissa1).range(52,0);
-//				buffer = static_cast< sc_biguint< 128 > > (mantissa_tot) << 1;
-//				buffer = buffer + static_cast< sc_uint<53> >(mantissa1).range(52,0);
+				//				buffer.range(counter + 52, counter) = static_cast< sc_biguint< 128 > > (mantissa_tot).range(counter + 52, counter) + static_cast< sc_uint<53> >(mantissa1).range(52,0);
+				//				buffer = static_cast< sc_biguint< 128 > > (mantissa_tot) << 1;
+				//				buffer = buffer + static_cast< sc_uint<53> >(mantissa1).range(52,0);
 
 				buffer = static_cast< sc_biguint< 128 > > (mantissa_tot) + (static_cast< sc_biguint<128> >(mantissa1) << (counter));
 
@@ -119,28 +123,26 @@ void mul_RTL :: elaborate_mul_FSM(void){
 		case S4:
 
 
-//			if(static_cast< sc_biguint< 128 > > (mantissa_tot).range(52,0) != 0){
-				//controllo che non ci siano numeri dopo il 53-esimo bit
-				if(static_cast< sc_biguint< 128 > > (mantissa_tot).range(127,53) != 0){
+			//controllo che non ci siano numeri dopo il 104-esimo bit
+			if(static_cast< sc_biguint< 128 > > (mantissa_tot).range(127,105) != 0){
 
 
-					mantissa_tot = mantissa_tot >> 1;
-					buffer = static_cast< sc_int<64> >( exp_tot ).range(63,0) + 1;
-					exp_tot = static_cast< sc_lv<64> > (buffer);
-					cout << "exp: " << static_cast< sc_int<64> >( exp_tot ) << endl;
-					cout << "shift a destra=>" << mantissa_tot.range(127,0) << endl;
+				mantissa_tot = mantissa_tot >> 1;
+				buffer = static_cast< sc_int<64> >( exp_tot ).range(63,0) + 1;
+				exp_tot = static_cast< sc_lv<64> > (buffer);
+				cout << "exp: " << static_cast< sc_int<64> >( exp_tot ) << endl;
+				cout << "shift a destra=>" << mantissa_tot.range(127,0) << endl;
 
-				}
+			}
 
-				else if(mantissa_tot[52] != '1'){
-					mantissa_tot  = mantissa_tot << 1;
-					buffer = static_cast< sc_int<64> >( exp_tot ).range(63,0) - 1;
-					exp_tot = static_cast< sc_lv<64> > (buffer);
-					cout << "exp: " << static_cast< sc_int<64> >( exp_tot ) << endl;
-					cout << "shift a sinistra=>" << mantissa_tot.range(127,0) << endl;
+			else if(mantissa_tot[104] != '1'){
+				mantissa_tot  = mantissa_tot << 1;
+				buffer = static_cast< sc_int<64> >( exp_tot ).range(63,0) - 1;
+				exp_tot = static_cast< sc_lv<64> > (buffer);
+				cout << "exp: " << static_cast< sc_int<64> >( exp_tot ) << endl;
+				cout << "shift a sinistra=>" << mantissa_tot.range(127,0) << endl;
 
-				}
-//			}
+			}
 			break;
 
 			//overflow?
@@ -152,15 +154,15 @@ void mul_RTL :: elaborate_mul_FSM(void){
 
 			//?
 		case S6:
-			//arrotondare (ma è stato gia' fatto, il bit di precisione e' gia' andato perso)
+			//arrotonda
 			break;
 
 			//devo normalizzare ancora?
 		case S7:
-			if(((static_cast< sc_biguint<128> > (mantissa_tot).range(127,53) == 0) && (mantissa_tot[52] == '1')))
+			if(((static_cast< sc_biguint<128> > (mantissa_tot).range(127,105) == 0) && (mantissa_tot[104] == '1')))
 				normalizzato.write( true );
 			else {
-				if((static_cast< sc_biguint<128> > (mantissa_tot).range(127,53) == 0) && ((static_cast< sc_biguint< 128 > > (mantissa_tot).range(52,0)) == 0)){
+				if((static_cast< sc_biguint<128> > (mantissa_tot).range(127,105) == 0) && ((static_cast< sc_biguint< 128 > > (mantissa_tot).range(104,0)) == 0)){
 					normalizzato.write( true ); }
 				else
 					normalizzato.write( false );
@@ -177,10 +179,11 @@ void mul_RTL :: elaborate_mul_FSM(void){
 
 			result_tot.range(63,63) = sign_tot ;
 			result_tot.range(62,52) = exp_tot.range(10,0) ;
-//			mantissa_tot = mantissa_tot << 1;
+			//			mantissa_tot = mantissa_tot << 1;
 
-			result_tot.range(51,0) = mantissa_tot.range(51,0) ;
-//			result_tot[52] = '1';
+			result_tot.range(51,0) = mantissa_tot.range(104,52) ;
+			//			result_tot[52] = '1';
+
 
 			cout << "res: " << result_tot.range(63,0) << endl;
 			out_result.write(result_tot);

@@ -29,8 +29,8 @@ void mul_RTL_testbench::run()
 
 	cout<<"Calcolo la moltiplicazione tra due double!"<<endl;
 
-	numero1 = 1.5;
-	numero2 = 1.5;
+	numero1 = 20.5;
+	numero2 = 20.5;
 
 	cout << endl;
 	cout << "\t " << numero1 << " \t * " << endl;
@@ -47,6 +47,9 @@ void mul_RTL_testbench::run()
 	while(result_isready.read() != 1) wait();
 	new_result = logicVectorToDouble(result.read());
 	cout << "\t " << new_result << endl;
+
+//	sc_lv<64> mantissa_tot = result.read() << 5;
+//	cout << "reees:" << logicVectorToDouble(mantissa_tot) << endl;
 
 
 	reset.write(0);
