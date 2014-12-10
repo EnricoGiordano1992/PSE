@@ -10,13 +10,27 @@
 
 #include <systemc-ams.h>
 
-SCA_TDF_MODULE (my_tdf_module )
+#include <systemc.h>
+
+
+
+SCA_TDF_MODULE (controller )
 {
 
-	sca_tdf::sca_in<double> in;
-	sca_tdf::sca_out<double> out;
-	SCA_CTOR(my_tdf_module) {}
-	// ! Constructor
+	sca_tdf::sca_in<double> r_input;
+	sca_tdf::sca_in<double> y_input;
+
+	 double r_calc;
+	 double y_calc;
+
+	 double err_calc;
+	 double err_calc_pre;
+
+	 double k_calc;
+	 double k_calc_pre;
+
+	sca_tdf::sca_out<double> k_out;
+
 	void set_attributes ();
 	// [] rate,tstep,delay
 	void initialize();
@@ -24,7 +38,11 @@ SCA_TDF_MODULE (my_tdf_module )
 	void processing ();
 	// ! behavior
 	void ac_processing ();
-	// [] ac-behavior
+
+	SCA_CTOR(controller)
+	{
+	}
+
 };
 
 #endif /* CONTROLLER_H_ */
