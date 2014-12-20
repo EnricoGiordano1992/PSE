@@ -4,7 +4,7 @@ SYSTEMC_AMS=$$SCAMS_HOME
 
 #SYSC_LIB=$(SYSTEMC)/lib-linux64
 #SYSC_AMS_LIB=$(SYSTEMC_AMS)/lib-linux64
-SYSTEMC=/usr/local/systemc-2.3.1
+SYSTEMC=/home/enrico/systemc-2.3.1
 SYSTEMC_AMS=/home/enrico/systemc-ams-2.0_beta1
 
 SYSC_LIB=$(SYSTEMC)/lib-linux64
@@ -29,7 +29,7 @@ clean:
 	@rm -f $(EXECUTABLE)
 
 $(EXECUTABLE): obj/main.o obj/controller.o obj/p_plant.o
-	@ $(LD) -o $@ $(INCDIR) $(LIBDIR) $(LIBS) $^
+	@ $(LD) -o $@ $(INCDIR) $(LIBDIR) obj/*.o $(LIBS)
 
 obj/controller.o: src/controller.cc
 	@ $(CXX) $(CFLAGS) -o $@ $(INCDIR) $(LIBDIR) $(LIBS) $<

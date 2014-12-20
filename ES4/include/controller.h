@@ -20,16 +20,16 @@ SCA_TDF_MODULE (controller )
 	sca_tdf::sca_in<double> r_input;
 	sca_tdf::sca_in<double> y_input;
 
-	 double r_calc;
-	 double y_calc;
-
-	 double err_calc;
-	 double err_calc_pre;
-
-	 double k_calc;
-	 double k_calc_pre;
-
 	sca_tdf::sca_out<double> k_out;
+
+	double r_calc;
+	double y_calc;
+
+	double err_calc;
+	double err_calc_pre;
+
+	double k_calc;
+	double k_calc_pre;
 
 	void set_attributes ();
 	// [] rate,tstep,delay
@@ -37,7 +37,7 @@ SCA_TDF_MODULE (controller )
 	// [] state
 	void processing ();
 	// ! behavior
-	void ac_processing ();
+
 
 	SCA_CTOR(controller)
 	{
