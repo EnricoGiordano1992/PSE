@@ -5,14 +5,10 @@
  *      Author: enrico
  */
 
-/*
- * controller.cc
- *
- *  Created on: Dec 2, 2014
- *      Author: enrico
- */
-
 #include "p_plant.h"
+
+
+
 
 // ! Constructor
 void p_plant::set_attributes (){

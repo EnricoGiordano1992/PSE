@@ -17,15 +17,12 @@
 SCA_TDF_MODULE (p_plant )
 {
 
+public:
 	sca_tdf::sca_in<double> k_input;
 
 	sca_tdf::sca_out<double> y_out;
 
-	//funzione di trasferimento
-	sca_tdf::sca_ltf_nd ltf_nd;
 
-	sca_util::sca_vector<double> num, den; // numerator and denominator coefficients
-	double h0; // DC gain
 
 	void set_attributes ();
 	// [] rate,tstep,delay
@@ -38,6 +35,18 @@ SCA_TDF_MODULE (p_plant )
 	SCA_CTOR(p_plant)
 	{
 	}
+
+private:
+
+    // 3dB cut-off frequency in Hz
+    double fc;
+    // DC gain
+    double h0;
+	//funzione di trasferimento
+	sca_tdf::sca_ltf_nd ltf_nd;
+
+	sca_util::sca_vector<double> num, den; // numerator and denominator coefficients
+
 
 };
 

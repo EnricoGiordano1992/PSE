@@ -28,7 +28,7 @@ clean:
 	@rm -f obj/*.o *~
 	@rm -f $(EXECUTABLE)
 
-$(EXECUTABLE): obj/main.o obj/controller.o obj/p_plant.o
+$(EXECUTABLE): obj/main.o obj/controller.o obj/p_plant.o obj/testbench.o
 	@ $(LD) -o $@ $(INCDIR) $(LIBDIR) obj/*.o $(LIBS)
 
 obj/controller.o: src/controller.cc
@@ -40,6 +40,8 @@ obj/main.o: src/main.cc
 obj/p_plant.o: src/p_plant.cc
 	@ $(CXX) $(CFLAGS) -o $@ $(INCDIR) $(LIBDIR) $(LIBS) $<
 
+obj/testbench.o: src/testbench.cc
+	@ $(CXX) $(CFLAGS) -o $@ $(INCDIR) $(LIBDIR) $(LIBS) $<
 
 
 .PHONY: all clean	

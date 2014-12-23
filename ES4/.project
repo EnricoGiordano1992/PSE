@@ -76,4 +76,11 @@
 		<nature>org.eclipse.cdt.managedbuilder.core.managedBuildNature</nature>
 		<nature>org.eclipse.cdt.managedbuilder.core.ScannerConfigNature</nature>
 	</natures>
+	<linkedResources>
+		<link>
+			<name>inputs.txt</name>
+			<type>1</type>
+			<locationURI>PROJECT_LOC/bin/inputs.txt</locationURI>
+		</link>
+	</linkedResources>
 </projectDescription>

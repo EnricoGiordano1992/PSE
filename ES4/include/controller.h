@@ -17,7 +17,8 @@
 SCA_TDF_MODULE (controller )
 {
 
-	sca_tdf::sca_in<double> r_input;
+public:
+	sca_tdf::sca_de::sca_in<double> r_input;
 	sca_tdf::sca_in<double> y_input;
 
 	sca_tdf::sca_out<double> k_out;
