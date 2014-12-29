@@ -32,6 +32,8 @@ public:
 	double k_calc;
 	double k_calc_pre;
 
+	ofstream log;
+
 	void set_attributes ();
 	// [] rate,tstep,delay
 	void initialize();

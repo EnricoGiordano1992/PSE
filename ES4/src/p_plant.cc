@@ -31,6 +31,7 @@ void p_plant::initialize(){
 void p_plant::processing (){
 
 	y_out.write( ltf_nd( num, den, k_input.read(), h0 ) );
+
 }
 // ! behavior
 
