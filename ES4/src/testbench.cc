@@ -19,9 +19,9 @@ void testbench::clk_gen()
 	while( true )
 	{
 		clk.write( sc_dt::SC_LOGIC_1 );
-		wait(PERIOD / 2, sc_core::SC_NS);
+		wait(PERIOD / 2, sc_core::SC_MS);
 		clk.write( sc_dt::SC_LOGIC_0 );
-		wait(PERIOD / 2, sc_core::SC_NS);
+		wait(PERIOD / 2, sc_core::SC_MS);
 	}
 }
 
@@ -37,8 +37,8 @@ void testbench::run()
     {
         cout << "send " << a << "to Controller" << endl;
         number.write(a);
+        wait();
     }
-
 
 	sc_stop();
 

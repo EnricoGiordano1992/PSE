@@ -53,7 +53,7 @@ int sc_main(int argc, char* argv[]) {
     //-----------------------Traces Here----------------------
 
     //-----------------------Start Here-----------------------
-    sc_core::sc_start(1, sc_core::SC_MS);
+    sc_core::sc_start();
     //--------------------Close Traces Here-------------------
 
     return 0;

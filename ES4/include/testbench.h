@@ -8,7 +8,7 @@
 #ifndef TESTBENCH_H_
 #define TESTBENCH_H_
 
-#define PERIOD 10
+#define PERIOD 40
 
 #include <systemc.h>
 #include <systemc-ams.h>

@@ -35,7 +35,6 @@ void controller::processing (){
 	k_out.write(k_calc);
 
 	log << sc_time_stamp().to_seconds() << " " << r_calc << endl;
-
 }
 // ! behavior
 
