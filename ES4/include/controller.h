@@ -1,8 +1,7 @@
 /*
  * controller.h
  *
- *  Created on: Dec 2, 2014
- *      Author: enrico
+ *      Author: Matteo Calabria
  */
 
 #ifndef CONTROLLER_H_
@@ -12,16 +11,15 @@
 
 #include <systemc.h>
 
-
-
 SCA_TDF_MODULE (controller )
 {
 
 public:
-	sca_tdf::sca_de::sca_in<double> r_input;
-	sca_tdf::sca_in<double> y_input;
+	//sca_tdf::sca_de::sca_in<double> r_input;
+	//sca_tdf::sca_in<double> y_input;
 
 	sca_tdf::sca_out<double> k_out;
+	sca_tdf::sca_in<double> err_in;
 
 	double r_calc;
 	double y_calc;

@@ -1,13 +1,13 @@
 /*
- * main.cpp
+ * main.cc
  *
- *  Created on: Dec 2, 2014
- *      Author: enrico
+ *      Author: Matteo Calabria
  */
 
 #include <systemc-ams.h>
 #include <systemc.h>
 #include "controller.h"
+#include "controller_err.h"
 #include "p_plant.h"
 #include "testbench.h"
 
@@ -27,10 +27,12 @@ int sc_main(int argc, char* argv[]) {
 //    sca_tdf::sca_signal<double> e_t;
     sca_tdf::sca_signal<double> k_t;
     sca_tdf::sca_signal<double> y_out;
+    sca_tdf::sca_signal<double> errore;
 
     //---------------------Modules Here-----------------------
     testbench testbench_module ("testbench");
     controller controller_istance("controller");
+    controller_err controller_err_istance("controller_err");
     p_plant	physical_plant_istance("physical_plant");
 
     //-----------------Interconnections Here------------------
@@ -40,9 +42,12 @@ int sc_main(int argc, char* argv[]) {
     //-----ELN Modules-----
 
     //-----TDF Modules-----
-    controller_istance.r_input(r_in);
-    controller_istance.y_input(y_out);
+    controller_err_istance.r_input(r_in);
+    controller_err_istance.y_input(y_out);
     controller_istance.k_out(k_t);
+
+    controller_err_istance.err_out(errore);
+    controller_istance.err_in(errore);   
 
     physical_plant_istance.k_input(k_t);
     physical_plant_istance.y_out(y_out);

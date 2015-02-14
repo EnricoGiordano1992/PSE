@@ -1,0 +1,166 @@
+m255
+K3
+13
+cModel Technology
+Z0 dC:\modeltech_10.1c\examples
+T_opt
+VP2VNJF?DlAbHi?TYSNYdC0
+04 4 4 work root root 1
+=1-d850e601e4ce-54b684fd-164-9ec0
+Z1 o-quiet -auto_acc_if_foreign -work work
+n@_opt
+Z2 OE;O;10.1c;51
+Z3 dC:\modeltech_10.1c\examples
+T_opt1
+VkfY?gMDPM5nL=;cV8:iBR1
+04 3 3 work fpm fpm 1
+=1-d850e601e4ce-54c79f1e-1f5-75f8
+R1
+n@_opt1
+R2
+R3
+Efpm
+Z4 w1422368204
+Z5 DPx4 ieee 11 numeric_std 0 22 O3PF8EB`?j9=z7KT`fn941
+Z6 DPx4 work 8 fpm_pack 0 22 ;>h@P?IHdh4FWmX>=_U?R3
+Z7 DPx3 std 6 textio 0 22 5>J:;AW>W0[[dW0I6EN1Q0
+Z8 DPx4 ieee 14 std_logic_1164 0 22 5=aWaoGZSMWIcH0i^f`XF1
+Z9 dC:\Users\enric_000\Documents\VHDL
+Z10 8C:/Users/enric_000/Documents/VHDL/fpm.vhdl
+Z11 FC:/Users/enric_000/Documents/VHDL/fpm.vhdl
+l0
+L24
+V_IM_3]n?eO]g5eO:7E;BB3
+Z12 OE;C;10.1c;51
+32
+Z13 !s108 1423931967.568000
+Z14 !s90 -reportprogress|300|-work|work|-2002|-explicit|-vopt|C:/Users/enric_000/Documents/VHDL/fpm.vhdl|
+Z15 !s107 C:/Users/enric_000/Documents/VHDL/fpm.vhdl|
+Z16 o-work work -2002 -explicit
+Z17 tExplicit 1
+!s100 [F<7z2M5QCYNC>IzhAA?51
+!i10b 1
+Afpm
+R5
+R6
+R7
+R8
+DEx4 work 3 fpm 0 22 _IM_3]n?eO]g5eO:7E;BB3
+l48
+L35
+V7ACUSYcF<_=B==C9BKJM]1
+R12
+32
+R13
+R14
+R15
+R16
+R17
+!s100 V7]9^_]UFYFEIbOcRGDik0
+!i10b 1
+Pfpm_pack
+R4
+R9
+R10
+R11
+l0
+L1
+V;>h@P?IHdh4FWmX>=_U?R3
+R12
+32
+R13
+R14
+R15
+R16
+R17
+!s100 =_7>;G9;2l=37M[4:=]hD3
+!i10b 1
+Emul
+Z18 w1423932186
+Z19 DPx4 ieee 11 numeric_bit 0 22 RE9LDG5Y>ElDk`fY=9GM]2
+DPx4 work 8 mul_pack 0 22 j3UoEo72M1LcZNHaAEn6W2
+R7
+R8
+R9
+Z20 8mul.vhdl
+Z21 Fmul.vhdl
+l0
+L15
+V`eHh6db>L3WYQ7b7d`l052
+!s100 k1BQTGfmf?zG9Y9_0OJEW2
+R12
+32
+!i10b 1
+Z22 !s108 1423932199.959000
+Z23 !s90 -reportprogress|300|mul.vhdl|
+Z24 !s107 mul.vhdl|
+R17
+Pmul_pack
+R18
+R9
+R20
+R21
+l0
+L1
+Vj3UoEo72M1LcZNHaAEn6W2
+!s100 lB?YTiH]X8f8f8KD<HReb3
+R12
+32
+!i10b 1
+R22
+R23
+R24
+R17
+Eroot
+Z25 w1421246764
+R19
+Z26 DPx4 work 9 root_pack 0 22 Kz3TYHhJ8^_]bzI8OEaFK1
+R7
+R8
+R9
+Z27 8root.vhdl
+Z28 Froot.vhdl
+l0
+L16
+V>JNZ?D0nGJkig4HfSdL4h0
+R12
+32
+Z29 !s108 1421247731.152000
+Z30 !s90 -reportprogress|300|root.vhdl|
+Z31 !s107 root.vhdl|
+R17
+!s100 42nRYoMlaI]`R=_@jS^oJ2
+!i10b 1
+Aroot
+R19
+R26
+R7
+R8
+DEx4 work 4 root 0 22 >JNZ?D0nGJkig4HfSdL4h0
+l37
+L25
+Vc_CiYn;oXN4eGGzGi@U6n2
+R12
+32
+R29
+R30
+R31
+R17
+!s100 B2bzabn;F1d5^U;Smc3e43
+!i10b 1
+Proot_pack
+R25
+R9
+R27
+R28
+l0
+L1
+VKz3TYHhJ8^_]bzI8OEaFK1
+R12
+32
+R29
+R30
+R31
+R17
+!s100 cPWl;2D42<HRSJiU>NC_B0
+!i10b 1

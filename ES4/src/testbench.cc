@@ -7,10 +7,8 @@ using namespace std;
 testbench::testbench(sc_module_name name_)
 : sc_module(name_)
 {
-
 	SC_THREAD(run);
 	sensitive << clk.pos();
-
 	SC_THREAD(clk_gen);
 }
 
@@ -40,7 +38,7 @@ void testbench::run()
         wait();
     }
 
-	sc_stop();
+    sc_stop();
 
 }
 

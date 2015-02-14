@@ -1,14 +1,10 @@
 /*
  * p_plant.cc
  *
- *  Created on: Dec 2, 2014
- *      Author: enrico
+ *      Author: Matteo Calabria
  */
 
 #include "p_plant.h"
-
-
-
 
 // ! Constructor
 void p_plant::set_attributes (){

@@ -1,8 +1,7 @@
 /*
  * testbench.h
  *
- *  Created on: Dec 20, 2014
- *      Author: enrico
+ *      Author: Matteo Calabria
  */
 
 #ifndef TESTBENCH_H_

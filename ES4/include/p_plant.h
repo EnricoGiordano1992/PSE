@@ -1,8 +1,7 @@
 /*
  * p_plant.h
  *
- *  Created on: Dec 20, 2014
- *      Author: enrico
+ *      Author: Matteo Calabria
  */
 
 #ifndef P_PLANT_H_
@@ -21,7 +20,6 @@ public:
 	sca_tdf::sca_in<double> k_input;
 
 	sca_tdf::sca_out<double> y_out;
-
 
 
 	void set_attributes ();
