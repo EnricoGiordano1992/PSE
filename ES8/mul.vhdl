@@ -1,15 +1,14 @@
 PACKAGE mul_pack IS
   CONSTANT SIZE : INTEGER := 64;
   -- definisco un tipo che corrisponde agli stati della macchina
-  TYPE FSM_ST IS (SR, S0, S0I, S1, S2, S3, S31, S4, S5, S6, S7, S8, S9);  
+  TYPE FSM_ST IS (SR, S0, S0I, S1, S2, S3, S31, S4, S5, S7, S8, S9);  
     
   END mul_pack;
   
   LIBRARY IEEE;
   USE IEEE.std_logic_1164.ALL;
   USE WORK.mul_pack.ALL;
-  USE IEEE.NUMERIC_BIT.ALL;
-  
+  use ieee.numeric_std.all;
   
   --definisco l'entità MUL
   entity mul is
@@ -34,6 +33,9 @@ end mul;
   
   signal status: FSM_ST;
   signal next_status: FSM_ST;
+  signal error: std_logic;
+  signal normalizzato: std_logic;
+
    
 --inizio a descrivere il comportamento della mia architettura
  begin 
@@ -51,6 +53,8 @@ end mul;
   
   variable sign1: std_logic;
   variable sign2: std_logic;
+
+  variable sign_tot: std_logic;
   
   variable result_tot: std_logic_vector (SIZE-1 DOWNTO 0);
   variable buff: std_logic_vector (127 DOWNTO 0);
@@ -59,27 +63,29 @@ end mul;
   variable vcl_number_b: std_logic_vector(SIZE-1 DOWNTO 0);
   variable vcl_result: std_logic_vector(SIZE-1 DOWNTO 0);
   variable end_mantissa: std_logic;
-  variable error: std_logic;
-  variable normalizzato: std_logic;
   variable counter: unsigned (32 downto 0);
 
      begin
        case status is
 	      when SR =>
-	        out_result <= '0';
+	        for i in 0 to 64 loop
+	           out_result(i) <= '0';
+	        end loop;
 
 	      when S0 =>
-	        out_result <= '0';
+	        for i in 0 to 64 loop
+	           out_result(i) <= '0';
+	        end loop;
 	        
 	      when S0I =>
 	        vcl_number_a := number_a;
 	        vcl_number_b := number_b;
 	        
-	        exp1 := number_a(62 downto 52);
-	        exp2 := number_b(62 downto 52);
+	        exp1(10 downto 0) := number_a(62 downto 52);
+	        exp2(10 downto 0) := number_b(62 downto 52);
 	       
-	        mantissa1 := number_a(51 downto 0); 
-	        mantissa2 := number_b(51 downto 0);
+	        mantissa1(51 downto 0) := number_a(51 downto 0); 
+	        mantissa2(51 downto 0) := number_b(51 downto 0);
 	        
 	        mantissa1(52) := '1';
 	        mantissa2(52) := '1';
@@ -87,16 +93,19 @@ end mul;
 	        sign1 := number_a(63);
 	        sign2 := number_b(63);
 	        
-	        counter := 0;
-	        mantissa_tot := "0";
-	        
+	        counter := to_unsigned(0, 33);
+
+	        for i in 0 to 127 loop
+ 	          mantissa_tot(i) := '0';
+	        end loop;
 	        
 	      WHEN S1 =>
-	        exp_tot := exp1 + exp2;
+	        --magic cast
+	        exp_tot := std_logic_vector(to_unsigned(to_integer(unsigned(exp1)) + to_integer(unsigned(exp2)), SIZE));
 	        
 	        
 	      WHEN S2 =>
-	        exp_tot := exp_tot - 1023;
+	        exp_tot := std_logic_vector(to_unsigned(to_integer(unsigned(exp_tot)) - 1023, SIZE));
         
         
 	      WHEN S3 =>
@@ -108,8 +117,8 @@ end mul;
 	        end if;
 	        
 	      WHEN S31 =>
-	        if(mantissa2(counter) = '1') then
-	          buff := mantissa_tot + (mantissa1 sll counter);
+	        if(mantissa2(to_integer(counter)) = '1') then
+	          buff := std_logic_vector((unsigned(mantissa_tot) + (unsigned(mantissa1) sll to_integer(unsigned(counter)))));
 	         
 	          mantissa_tot := buff;
 	          
@@ -118,32 +127,29 @@ end mul;
 	        counter := counter + 1;
 	        
 	      WHEN S4 =>
-	        if(mantissa_tot(127 downto 105) /= 0) then
-	          mantissa_tot := mantissa_tot srl 1;
-	          buff := exp_tot(63 downto 0) + 1;
-	          exp_tot := buff;
+	        if(unsigned(mantissa_tot(127 downto 105)) /= 0) then
+	          mantissa_tot := std_logic_vector(unsigned(mantissa_tot) srl 1);
+	          buff := std_logic_vector(to_unsigned(to_integer(unsigned(exp_tot(63 downto 0))) + 1, 128));
+	          exp_tot := buff(63 downto 0);
 	          
 	        elsif(mantissa_tot(104) /= '1') then
-	          mantissa_tot := mantissa_tot sll 1;
-	          buff := exp_tot(63 downto 0) - 1;
-	          exp_tot := buff;
+	          mantissa_tot := std_logic_vector(unsigned(mantissa_tot) sll 1);
+	          buff(63 downto 0) := std_logic_vector(unsigned(exp_tot(63 downto 0)) - 1);
+	          exp_tot := buff(63 downto 0);
 	          
 	        end if;
         
 		  WHEN S5 =>
-		    if(exp_tot = 0 or mantissa_tot = 0) then
+		    if(unsigned(exp_tot) = 0 or unsigned(mantissa_tot) = 0) then
 		      error <= '1';
 			end if;
-		          
-	      WHEN S6 =>
-	        nop;
-		          
+		          		          
 		  WHEN S7 =>
-		    if(mantissa_tot(127 downto 105) = 0 and mantissa_tot(104) = '1') then
+		    if(unsigned(mantissa_tot(127 downto 105)) = 0 and mantissa_tot(104) = '1') then
 		      normalizzato <= '1';
 		        
 		    else
-		        if(mantissa_tot(127 downto 105) = 0 and mantissa_tot(104 downto 0) = 0) then
+		        if(unsigned(mantissa_tot(127 downto 105)) = 0 and unsigned(mantissa_tot(104 downto 0)) = 0) then
 		          normalizzato <= '1';
 		        else
 		          normalizzato <= '0';
@@ -156,7 +162,7 @@ end mul;
 		  WHEN S9 =>
 		    result_tot(63) := sign_tot;
 		    result_tot(62 downto 52) := exp_tot(10 downto 0);
-		    result_tot(51 downto 0) := mantissa_tot(104 downto 52);
+		    result_tot(51 downto 0) := mantissa_tot(104 downto 53);  --prima era downto 52
 		    out_result <= result_tot;
 		    result_isready <= '1';
 	          
@@ -175,7 +181,12 @@ end mul;
           
           case next_status is
             when SR =>
-              out_result <= "0000000000000000000000000000000000000000000000000000000000000000";
+
+     	        for i in 0 to 64 loop
+                out_result(0) <= '0';
+              end loop;
+              
+              
             end case;
           end if;
         end process;
