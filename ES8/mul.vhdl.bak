@@ -35,6 +35,7 @@ end mul;
   signal next_status: FSM_ST;
   signal error: std_logic;
   signal normalizzato: std_logic;
+  signal end_mantissa: std_logic;
 
    
 --inizio a descrivere il comportamento della mia architettura
@@ -62,7 +63,6 @@ end mul;
   variable vcl_number_a: std_logic_vector(SIZE-1 DOWNTO 0);
   variable vcl_number_b: std_logic_vector(SIZE-1 DOWNTO 0);
   variable vcl_result: std_logic_vector(SIZE-1 DOWNTO 0);
-  variable end_mantissa: std_logic;
   variable counter: unsigned (32 downto 0);
 
      begin
@@ -110,10 +110,10 @@ end mul;
         
 	      WHEN S3 =>
 	        if (counter <= 52) then
-	          end_mantissa := '0';
+	          end_mantissa <= '0';
 	        
 	        else
-	          end_mantissa := '1';
+	          end_mantissa <= '1';
 	        end if;
 	        
 	      WHEN S31 =>
@@ -185,6 +185,57 @@ end mul;
      	        for i in 0 to 64 loop
                 out_result(0) <= '0';
               end loop;
+              
+            when S0 =>
+              if(isready = '1') then
+                next_status <= S0I;
+              else
+                next_status <= S0;
+              end if;
+              
+            when S0I =>
+                next_status <= S1;
+                
+            when S1 =>
+                next_status <= S2;
+
+            when S2 =>
+                next_status <= S3;
+
+            when S3 =>
+                if(end_mantissa = '1') then
+                  next_status <= S4;
+                else
+                  next_status <= S31;                
+                end if;
+                  
+            when S31 =>
+                next_status <= S3;
+
+            when S4 =>
+                next_status <= S5;
+
+            when S5 =>
+                if(error = '1') then
+                  next_status <= SR;
+                else
+                  next_status <= S7;
+                end if;
+                  
+                  
+            when S7 =>
+              if(normalizzato = '1') then
+                  next_status <= S8;
+              else
+                  next_status <= S4;
+                  
+            when S8 =>
+                next_status <= S9;
+
+            when S9 =>
+                next_status <= SR;
+
+              
             end case;
           end if;
         end process;
