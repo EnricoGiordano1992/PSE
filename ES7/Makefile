@@ -15,12 +15,12 @@ LD         = g++
 RM         = rm -rf
 CXXFLAGS   = -c -ansi
 
-EXECUTABLE=./bin/es4.x
+EXECUTABLE=./bin/platform.x
 
 INCS =	-I $(SCAMS_INC) \
 		-I $(SYSTEMC_INC)\
-	-I./include/\
-	-I.
+		-I./include/\
+		-I.
 
 LIBS =	-L $(SYSTEMC_LIB) \
 		-L $(SCAMS_LIB) \
@@ -28,11 +28,14 @@ LIBS =	-L $(SYSTEMC_LIB) \
 	 	-lsystemc \
 	 	-lm \
 
-OBJS =     ./obj/testbench.o \
-	   ./obj/p_plant.o \
-	   ./obj/controller.o \
+OBJS = ./obj/controller.o \
 	   ./obj/controller_err.o \
-	   ./obj/main.o
+	   ./obj/fpm_RTL.o \
+	   ./obj/fpm_TLM_LT_testbench.o \
+	   ./obj/main.o \
+	   ./obj/p_plant.o \
+	   ./obj/support.o \
+	   ./obj/transactor_RTL_TLM.o
 
 all: $(EXECUTABLE)
 
@@ -44,27 +47,36 @@ $(EXECUTABLE): $(OBJS)
 	
 #------------------------------------------------------------
 #---------------------------Main-----------------------------
-obj/main.o: src/main.cc
-	@echo Compiling $@
-	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
-
-#------------------------------------------------------------
-#--------------------TDF Modules-----------------------------
-
-
-obj/testbench.o: src/testbench.cc
-	@echo Compiling $@
-	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
-
 obj/controller.o: src/controller.cc
 	@echo Compiling $@
 	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
+
 
 obj/controller_err.o: src/controller_err.cc
 	@echo Compiling $@
 	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
 
+obj/fpm_RTL.o: src/fpm_RTL.cc
+	@echo Compiling $@
+	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
+
+obj/fpm_TLM_LT_testbench.o: src/fpm_TLM_LT_testbench.cc
+	@echo Compiling $@
+	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
+
+obj/main.o: src/main.cc
+	@echo Compiling $@
+	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
+
 obj/p_plant.o: src/p_plant.cc
+	@echo Compiling $@
+	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
+
+obj/support.o: src/support.cc
+	@echo Compiling $@
+	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
+
+obj/transactor_RTL_TLM.o: src/transactor_RTL_TLM.cc
 	@echo Compiling $@
 	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
 
