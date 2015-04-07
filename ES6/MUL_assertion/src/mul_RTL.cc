@@ -64,13 +64,6 @@ void mul_RTL :: elaborate_mul_FSM(void){
 			counter = 0;
 			mantissa_tot = "0";
 
-			cout << "numero 1: " << number_a.read() << endl;
-			cout << "numero 2: " << number_b.read() << endl;
-			cout << "mantissa1:" << mantissa1.range(52,0) << endl;
-			cout << "mantissa2:" << mantissa1.range(52,0) << endl;
-			cout << "exp1: " << exp1 << endl;
-			cout << "exp2: " << exp2 << endl;
-
 			break;
 
 			//sommo gli esponenti
@@ -81,16 +74,13 @@ void mul_RTL :: elaborate_mul_FSM(void){
 
 			//polarizzo il risultato
 		case S2:
-			cout << "exp tot:" << static_cast< sc_int<64> >( exp_tot ) << endl;
 			exp_tot = static_cast< sc_int<64> >( exp_tot ) - 1023;
-			cout << "exp tot normalizzato:" << static_cast< sc_int<64> >( exp_tot ) << endl;
 
 			break;
 
 			//prodotto tra mantisse: controllo se devo fare altri passi
 		case S3:
 			if(counter <= 52){
-				cout << counter << " continuo a moltiplicare" << endl;
 				end_mantissa.write(false);
 			}
 			else
@@ -111,7 +101,6 @@ void mul_RTL :: elaborate_mul_FSM(void){
 
 				mantissa_tot = static_cast< sc_lv< 128 > > (buffer);
 
-				cout << "moltiplico=>" << mantissa_tot.range(127,0) << endl;
 
 			}
 
@@ -185,7 +174,6 @@ void mul_RTL :: elaborate_mul_FSM(void){
 			//			result_tot[52] = '1';
 
 
-			cout << "res: " << result_tot.range(63,0) << endl;
 			out_result.write(result_tot);
 			result_isready.write(1);
 
@@ -270,21 +258,21 @@ void mul_RTL :: elaborate_mul(void){
 
 
 	}
-
+}
 
 
 // CHECKERS
 
 void mul_RTL :: property1(void){
-  // if number_isready == 1 then result_isready == 1 
-  // in less than 100 clock cycles
+  // if isready == 1 then result_isready == 1 
+  // in less than 500 clock cycles
   
   int count = 0;
   bool true_property = false;
 
   while(true){
-    if (number_isready.read() == 1){
-      while((count < 100)&(!true_property)){
+    if (isready.read() == 1){
+      while((count++ < 500)&(!true_property)){
       wait();
       if (result_isready.read() == 1)
 	true_property = true;
@@ -304,11 +292,11 @@ void mul_RTL :: property1(void){
 }
 
 void mul_RTL :: property2(void){
-  // if number_isready == 0 then result_port == 0 and result_isready == 0
+  // if isready == 0 then out_result == X....X and result_isready == 0
   
   while(true){
-    if (number_isready.read() == 0){
-      if ((result_port.read() == 0)&&(result_isready.read() == 0))
+    if (isready.read() == 0){
+      if ((out_result.read() == "XXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXXX")&&(result_isready.read() == 0))
 	cout<<"\033[35m"<<"[CHECK: ] property 2 is true"<<"\033[0m"<<endl;
       else{
 	cout<<"\033[35m"<<"[CHECK: ] property 2 is false"<<"\033[0m"<<endl;
@@ -320,15 +308,16 @@ void mul_RTL :: property2(void){
 }
   
 void mul_RTL :: property3(void){
-  // if Counter < 16 then STATUS = ST4
+  // if end_mantissa == true then normalizzato == false
 
   while(true){
-    if (Counter.read() < 16){
-      if (STATUS.read() == ST_4)       
+    if (end_mantissa.read()){
+      if (normalizzato.read())       
 	cout<<"\033[32m"<<"[CHECK: ] property 3 is true"<<"\033[0m"<<endl;
       else{
 	cout<<"\033[32m"<<"[CHECK: ] property 3 is false"<<"\033[0m"<<endl;
-	sc_stop();
+	//sc_stop();
+	break;
       }
     }
     wait();

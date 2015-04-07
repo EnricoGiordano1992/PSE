@@ -41,6 +41,21 @@ SC_MODULE(mul_RTL){
 	void elaborate_mul(void);
 	void elaborate_mul_FSM(void);
 
+
+	  // CHECKERS
+
+	  void property1(void);
+	  // if isready == 1 then result_isready == 1 
+	  // in less than 500 clock cycles
+
+	  void property2(void);
+  // if isready == 0 then out_result == X....X and result_isready == 0
+
+	  void property3(void);
+	  // if Counter < 16 then STATUS = ST4
+
+
+
 	SC_CTOR(mul_RTL){
 		SC_METHOD(elaborate_mul_FSM);
 		sensitive << reset.neg();
@@ -50,7 +65,21 @@ SC_MODULE(mul_RTL){
 
 		SC_METHOD(elaborate_mul);
 		sensitive << STATUS << isready << number_a << number_b;
+
+
+
+		    SC_THREAD(property1);
+		    sensitive << clk.pos() << isready << result_isready;
+
+		    SC_THREAD(property2);
+		    sensitive<<isready<<out_result<<result_isready;
+
+		    SC_THREAD(property3);
+		    sensitive<<end_mantissa<<normalizzato<<STATUS;
+
 	};
+
+
 };
 
 #endif

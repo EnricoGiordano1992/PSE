@@ -64,13 +64,6 @@ void mul_RTL :: elaborate_mul_FSM(void){
 			counter = 0;
 			mantissa_tot = "0";
 
-			cout << "numero 1: " << number_a.read() << endl;
-			cout << "numero 2: " << number_b.read() << endl;
-			cout << "mantissa1:" << mantissa1.range(52,0) << endl;
-			cout << "mantissa2:" << mantissa1.range(52,0) << endl;
-			cout << "exp1: " << exp1 << endl;
-			cout << "exp2: " << exp2 << endl;
-
 			break;
 
 			//sommo gli esponenti
@@ -81,16 +74,13 @@ void mul_RTL :: elaborate_mul_FSM(void){
 
 			//polarizzo il risultato
 		case S2:
-			cout << "exp tot:" << static_cast< sc_int<64> >( exp_tot ) << endl;
 			exp_tot = static_cast< sc_int<64> >( exp_tot ) - 1023;
-			cout << "exp tot normalizzato:" << static_cast< sc_int<64> >( exp_tot ) << endl;
 
 			break;
 
 			//prodotto tra mantisse: controllo se devo fare altri passi
 		case S3:
 			if(counter <= 52){
-				cout << counter << " continuo a moltiplicare" << endl;
 				end_mantissa.write(false);
 			}
 			else
@@ -111,7 +101,6 @@ void mul_RTL :: elaborate_mul_FSM(void){
 
 				mantissa_tot = static_cast< sc_lv< 128 > > (buffer);
 
-				cout << "moltiplico=>" << mantissa_tot.range(127,0) << endl;
 
 			}
 
@@ -185,7 +174,6 @@ void mul_RTL :: elaborate_mul_FSM(void){
 			//			result_tot[52] = '1';
 
 
-			cout << "res: " << result_tot.range(63,0) << endl;
 			out_result.write(result_tot);
 			result_isready.write(1);
 
