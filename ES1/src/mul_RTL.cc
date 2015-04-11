@@ -119,8 +119,8 @@ void mul_RTL :: elaborate_mul_FSM(void){
 				mantissa_tot = mantissa_tot >> 1;
 				buffer = static_cast< sc_int<64> >( exp_tot ).range(63,0) + 1;
 				exp_tot = static_cast< sc_lv<64> > (buffer);
-				cout << "exp: " << static_cast< sc_int<64> >( exp_tot ) << endl;
-				cout << "shift a destra=>" << mantissa_tot.range(127,0) << endl;
+				//cout << "exp: " << static_cast< sc_int<64> >( exp_tot ) << endl;
+				//cout << "shift a destra=>" << mantissa_tot.range(127,0) << endl;
 
 			}
 
@@ -128,8 +128,8 @@ void mul_RTL :: elaborate_mul_FSM(void){
 				mantissa_tot  = mantissa_tot << 1;
 				buffer = static_cast< sc_int<64> >( exp_tot ).range(63,0) - 1;
 				exp_tot = static_cast< sc_lv<64> > (buffer);
-				cout << "exp: " << static_cast< sc_int<64> >( exp_tot ) << endl;
-				cout << "shift a sinistra=>" << mantissa_tot.range(127,0) << endl;
+				//cout << "exp: " << static_cast< sc_int<64> >( exp_tot ) << endl;
+				//cout << "shift a sinistra=>" << mantissa_tot.range(127,0) << endl;
 
 			}
 			break;
