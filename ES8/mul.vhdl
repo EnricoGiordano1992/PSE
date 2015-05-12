@@ -72,6 +72,21 @@ end mul;
 	        for i in 0 to 63 loop 
 	           out_result(i) <= '0';
           end loop;
+	        for i in 0 to 127 loop 
+	           mantissa_tot(i) := '0';
+          end loop;
+	        for i in 0 to 127 loop 
+	           mantissa1(i) := '0';
+          end loop;
+	        for i in 0 to 127 loop 
+	           mantissa2(i) := '0';
+          end loop;
+	        for i in 0 to 63 loop 
+	           buff(i) := '0';
+          end loop;
+          
+          counter := to_unsigned(0, 33);
+          
 
 	      when S0 =>
 	        for i in 0 to 63 loop 

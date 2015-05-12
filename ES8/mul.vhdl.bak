@@ -72,6 +72,14 @@ end mul;
 	        for i in 0 to 63 loop 
 	           out_result(i) <= '0';
           end loop;
+	        for i in 0 to 127 loop 
+	           mantissa_tot(i) := '0';
+          end loop;
+	        for i in 0 to 63 loop 
+	           buff(i) := '0';
+          end loop;
+          
+          counter := to_unsigned(0, 33);
 
 	      when S0 =>
 	        for i in 0 to 63 loop 
@@ -147,7 +155,7 @@ end mul;
 		          		          
 		  WHEN S7 =>
 		    dioporco <= mantissa_tot;
-		    if(unsigned(mantissa_tot(127 downto 105)) = 0 ) then
+		    if(unsigned(mantissa_tot(127 downto 105)) = 0 and mantissa_tot(104) = '1') then
 		      normalizzato <= '1';
 		        
 		    else
