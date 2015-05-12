@@ -36,12 +36,13 @@ end mul;
   signal error: std_logic;
   signal normalizzato: std_logic;
   signal end_mantissa: std_logic;
+  signal dioporco: std_logic_vector (127 DOWNTO 0);
 
    
 --inizio a descrivere il comportamento della mia architettura
  begin 
    -- quello che in systemC era mul_RTL
-   process(status, isready, number_a, number_b)
+   process(status, isready, number_a, number_b, dioporco)
 
   --scrivo le variabili che mi servono
   variable exp1: std_logic_vector (SIZE-1 DOWNTO 0);
@@ -68,14 +69,14 @@ end mul;
      begin
        case status is
 	      when SR =>
-	        for i in 0 to 64 loop
+	        for i in 0 to 63 loop 
 	           out_result(i) <= '0';
-	        end loop;
+          end loop;
 
 	      when S0 =>
-	        for i in 0 to 64 loop
+	        for i in 0 to 63 loop 
 	           out_result(i) <= '0';
-	        end loop;
+          end loop;
 	        
 	      when S0I =>
 	        vcl_number_a := number_a;
@@ -145,6 +146,7 @@ end mul;
 			end if;
 		          		          
 		  WHEN S7 =>
+		    dioporco <= mantissa_tot;
 		    if(unsigned(mantissa_tot(127 downto 105)) = 0 and mantissa_tot(104) = '1') then
 		      normalizzato <= '1';
 		        
@@ -181,10 +183,7 @@ end mul;
           
           case next_status is
             when SR =>
-
-     	        for i in 0 to 64 loop
-                out_result(0) <= '0';
-              end loop;
+                next_status <= S0;            	 
               
             when S0 =>
               if(isready = '1') then
