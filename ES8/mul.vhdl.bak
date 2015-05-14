@@ -9,7 +9,7 @@ PACKAGE mul_pack IS
   USE IEEE.std_logic_1164.ALL;
   USE WORK.mul_pack.ALL;
   use ieee.numeric_std.all;
-  
+
   --definisco l'entità MUL
   entity mul is
     port (
@@ -36,13 +36,12 @@ end mul;
   signal error: std_logic;
   signal normalizzato: std_logic;
   signal end_mantissa: std_logic;
-  signal dioporco: std_logic_vector (127 DOWNTO 0);
 
    
 --inizio a descrivere il comportamento della mia architettura
  begin 
    -- quello che in systemC era mul_RTL
-   process(status, isready, number_a, number_b, dioporco)
+   process(status, isready, number_a, number_b)
 
   --scrivo le variabili che mi servono
   variable exp1: std_logic_vector (SIZE-1 DOWNTO 0);
@@ -75,11 +74,27 @@ end mul;
 	        for i in 0 to 127 loop 
 	           mantissa_tot(i) := '0';
           end loop;
+	        for i in 0 to 127 loop 
+	           mantissa1(i) := '0';
+          end loop;
+	        for i in 0 to 127 loop 
+	           mantissa2(i) := '0';
+          end loop;
 	        for i in 0 to 63 loop 
 	           buff(i) := '0';
           end loop;
+	        for i in 0 to 10 loop 
+	           exp_tot(i) := '0';
+          end loop;
+	        for i in 0 to 10 loop 
+	           exp1(i) := '0';
+          end loop;
+	        for i in 0 to 10 loop 
+	           exp2(i) := '0';
+          end loop;
           
           counter := to_unsigned(0, 33);
+          
 
 	      when S0 =>
 	        for i in 0 to 63 loop 
@@ -103,18 +118,14 @@ end mul;
 	        sign2 := number_b(63);
 	        
 	        counter := to_unsigned(0, 33);
-
-	        for i in 0 to 127 loop
- 	          mantissa_tot(i) := '0';
-	        end loop;
 	        
 	      WHEN S1 =>
 	        --magic cast
-	        exp_tot := std_logic_vector(to_unsigned(to_integer(unsigned(exp1)) + to_integer(unsigned(exp2)), SIZE));
+	        exp_tot := std_logic_vector((unsigned(exp1)) + (unsigned(exp2)));
 	        
 	        
 	      WHEN S2 =>
-	        exp_tot := std_logic_vector(to_unsigned(to_integer(unsigned(exp_tot)) - 1023, SIZE));
+	        exp_tot := std_logic_vector((unsigned(exp_tot) - 1023));
         
         
 	      WHEN S3 =>
@@ -154,7 +165,6 @@ end mul;
 			end if;
 		          		          
 		  WHEN S7 =>
-		    dioporco <= mantissa_tot;
 		    if(unsigned(mantissa_tot(127 downto 105)) = 0 and mantissa_tot(104) = '1') then
 		      normalizzato <= '1';
 		        
