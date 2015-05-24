@@ -36,12 +36,13 @@ end mul;
   signal error: std_logic;
   signal normalizzato: std_logic;
   signal end_mantissa: std_logic;
+  signal log: std_logic_vector(127 downto 0);
 
    
 --inizio a descrivere il comportamento della mia architettura
  begin 
    -- quello che in systemC era mul_RTL
-   process(status, isready, number_a, number_b)
+   process(status, isready, number_a, number_b, log)
 
   --scrivo le variabili che mi servono
   variable exp1: std_logic_vector (SIZE-1 DOWNTO 0);
@@ -83,13 +84,13 @@ end mul;
 	        for i in 0 to 63 loop 
 	           buff(i) := '0';
           end loop;
-	        for i in 0 to 10 loop 
+	        for i in 0 to SIZE-1 loop 
 	           exp_tot(i) := '0';
           end loop;
-	        for i in 0 to 10 loop 
+	        for i in 0 to SIZE-1 loop 
 	           exp1(i) := '0';
           end loop;
-	        for i in 0 to 10 loop 
+	        for i in 0 to SIZE-1 loop 
 	           exp2(i) := '0';
           end loop;
           
@@ -147,6 +148,7 @@ end mul;
 	        counter := counter + 1;
 	        
 	      WHEN S4 =>
+	        log <= mantissa_tot;
 	        if(unsigned(mantissa_tot(127 downto 105)) /= 0) then
 	          mantissa_tot := std_logic_vector(unsigned(mantissa_tot) srl 1);
 	          buff := std_logic_vector(to_unsigned(to_integer(unsigned(exp_tot(63 downto 0))) + 1, 128));
@@ -163,6 +165,7 @@ end mul;
 		    if(unsigned(exp_tot) = 0 or unsigned(mantissa_tot) = 0) then
 		      error <= '1';
 			end if;
+
 		          		          
 		  WHEN S7 =>
 		    if(unsigned(mantissa_tot(127 downto 105)) = 0 and mantissa_tot(104) = '1') then
@@ -182,7 +185,7 @@ end mul;
 		  WHEN S9 =>
 		    result_tot(63) := sign_tot;
 		    result_tot(62 downto 52) := exp_tot(10 downto 0);
-		    result_tot(51 downto 0) := mantissa_tot(104 downto 53);  --prima era downto 52
+		    result_tot(51 downto 0) := mantissa_tot(103 downto 52);  --prima era downto 52
 		    out_result <= result_tot;
 		    result_isready <= '1';
 	          
@@ -230,7 +233,11 @@ end mul;
                 next_status <= S3;
 
             when S4 =>
+              if(normalizzato = '1') then
+                  next_status <= S8;
+              else
                 next_status <= S5;
+              end if;
 
             when S5 =>
                 if(error = '1') then
@@ -238,7 +245,7 @@ end mul;
                 else
                   next_status <= S7;
                 end if;
-                  
+            
                   
             when S7 =>
               if(normalizzato = '1') then
