@@ -1,7 +1,7 @@
 #include "mul_RTL.hh"
 
 void mul_RTL :: elaborate_mul_FSM(void){
-  cout<<"\t"<<sc_time_stamp()<<" - mul: SQRT_FSM"<<endl;
+  cout<<"\t"<<sc_time_stamp()<<" - mul: elaborate_MUL_FSM"<<endl;
 
 	//variabili interne
 	static sc_lv<64> exp1, exp2;
@@ -195,7 +195,8 @@ void mul_RTL :: elaborate_mul_FSM(void){
 
 void mul_RTL :: elaborate_mul(void){
 
-
+  cout<<"\t"<<sc_time_stamp()<<" - mul: elaborate_MUL"<<endl;
+  
 	NEXT_STATUS = STATUS;
 
 	switch(STATUS){
