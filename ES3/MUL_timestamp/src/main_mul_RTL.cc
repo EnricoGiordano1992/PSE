@@ -43,7 +43,15 @@ int sc_main(int argc, char **argv)
   sc_trace(fp, p_In_data2, "number2");
   sc_trace(fp, p_result, "result");
 
-  
+  sc_trace(fp, i_mul_RTL.isready, "isready");
+  sc_trace(fp, i_mul_RTL.result_isready, "result_isready");
+  sc_trace(fp, i_mul_RTL.error, "error");
+  sc_trace(fp, i_mul_RTL.end_mantissa, "end_mantissa");
+  sc_trace(fp, i_mul_RTL.normalizzato, "normalizzato");  
+  sc_trace(fp, i_mul_RTL.STATUS, "STATUS");
+  sc_trace(fp, i_mul_RTL.NEXT_STATUS, "NEXT_STATUS");
+
+    
   sc_start();
 
   return 0;

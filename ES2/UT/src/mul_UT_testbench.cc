@@ -23,17 +23,21 @@ void mul_UT_testbench::run()
 
     mul_packet.numero_a = 2.5;
     mul_packet.numero_b = 1.3;
-    cout<<"\t "<<mul_packet.numero_a << " * " << mul_packet.numero_b << " = ";
+   std::cout<<"[TB:] Calculating the multiplication of: "<<std::endl;
+   cout<<"\t "<<mul_packet.numero_a << " * " << mul_packet.numero_b << " = ";
     payload.set_data_ptr((unsigned char*) &mul_packet);
     payload.set_address(0);
     payload.set_write();
     
     // start write transaction
+  std::cout<<"[TB:] Invoking the b_transport primitive - write"<<std::endl;
     initiator_socket->b_transport(payload, local_time);
 
     // start read transaction
     if(payload.get_response_status() == tlm::TLM_OK_RESPONSE){
-      cout << mul_packet.risultato << endl;
+     std::cout<<"[TB:] TLM protocol correctly implemented"<<std::endl;
+    std::cout<<"[TB:] Result is: " << std::endl;
+     cout << mul_packet.risultato << endl;
 
   }
   sc_stop();

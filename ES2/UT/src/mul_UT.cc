@@ -17,14 +17,19 @@ void mul_UT::b_transport(tlm::tlm_generic_payload& trans, sc_time& t)
   ioDataStruct = *((iostruct*) trans.get_data_ptr());
 
   if (trans.is_write()) {
+    std::cout<<"\t\t[MULTIPLIER:] Received invocation of the b_transport primitive - write"<<std::endl;
+    std::cout<<"\t\t[MULTIPLIER:] Invoking the multiplier_function to calculate the moltiplication"<<std::endl;
     mul_function();
     trans.set_response_status(tlm::TLM_OK_RESPONSE);
     ioDataStruct.risultato = tmp_result;
     *((iostruct*) trans.get_data_ptr()) = ioDataStruct;
+    std::cout<<"\t\t[MULTIPLIER:] Returning result: "<<tmp_result<<std::endl;
   } 
   else if (trans.is_read()){
+    std::cout<<"\t\t[MULTIPLIER:] Received invocation of the b_transport primitive - read"<<std::endl;
     ioDataStruct.risultato = tmp_result;
     *((iostruct*) trans.get_data_ptr()) = ioDataStruct;
+    std::cout<<"\t\t[MULTIPLIER:] Returning result: "<<tmp_result<<std::endl;
   }
 
 }
@@ -48,6 +53,7 @@ unsigned int mul_UT::transport_dbg(tlm::tlm_generic_payload& trans)
 
 void mul_UT:: mul_function()
 {
+  std::cout<<"\t\t[MULTIPLIER:] Calculating multiplier_function ... "<<std::endl;
   tmp_result = ioDataStruct.numero_a * ioDataStruct.numero_b;
 }
 

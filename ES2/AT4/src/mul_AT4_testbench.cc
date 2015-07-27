@@ -38,6 +38,7 @@ void mul_AT4_testbench::run()
     mul_packet.numero_a = 3.7;
     mul_packet.numero_b = 6.6;
 
+  cout<<sc_time_stamp()<<"-[TB:] Calculating the  multiplication of "<<endl;
     cout<<"\t "<<mul_packet.numero_a << " * " << mul_packet.numero_b << " = ";
     // start write transaction
     tlm::tlm_phase phase = tlm::BEGIN_REQ;
@@ -45,6 +46,7 @@ void mul_AT4_testbench::run()
     payload.set_data_ptr((unsigned char*) &mul_packet);
     payload.set_write();
 
+  cout<<sc_time_stamp()<<"-[TB:] Invoking the nb_transport_fw primitive of multiplier - write"<<endl;
     tlm::tlm_sync_enum result = initiator_socket->nb_transport_fw(payload, phase, local_time);
 
     if (result == tlm::TLM_COMPLETED) {
@@ -52,14 +54,17 @@ void mul_AT4_testbench::run()
       // wrong happened. We should inspect the response status and
       // take appropriate actions. In this case we just stop the simulation.
       //cout << "Transaction error. Forcing simulation stop." << endl;
+    cout <<sc_time_stamp()<<"-[ERROR:] Transaction error on nb_transport_fw. Forcing simulation stop." << endl;
       sc_stop();
     }
 
     // Phase must be END_REQ
     if (phase != tlm::END_REQ) {
-      //cout << "Unexpected protocol phase. Forcing simulation stop." << endl;
+      cout << "Unexpected protocol phase. Forcing simulation stop." << endl;
       sc_stop();
     }
+
+  cout<<sc_time_stamp()<<"-[TB:] Waiting for nb_transport_bw to be invoked "<<endl;
 
     response_pending = true;
     wait(available_response);
@@ -70,6 +75,7 @@ void mul_AT4_testbench::run()
     payload.set_address(0);
     payload.set_data_ptr((unsigned char*) &mul_packet);
     payload.set_read();
+  cout<<sc_time_stamp()<<"-[TB:] Invoking the nb_transport_fw primitive of multiplier - read"<<endl;
 
     result = initiator_socket->nb_transport_fw(payload, phase, local_time);
 
@@ -77,13 +83,13 @@ void mul_AT4_testbench::run()
       // If the target immediately completes the transaction something
       // wrong happened. We should inspect the response status and
       // take appropriate actions. In this case we just stop the simulation.
-      //cout << "Transaction error. Forcing simulation stop." << endl;
+      cout << "Transaction error. Forcing simulation stop." << endl;
       sc_stop();
     }
 
     // Phase must be END_REQ
     if (phase != tlm::END_REQ) {
-      //cout << "Unexpected protocol phase. Forcing simulation stop." << endl;
+      cout << "Unexpected protocol phase. Forcing simulation stop." << endl;
       sc_stop();
     }
 
@@ -92,6 +98,8 @@ void mul_AT4_testbench::run()
     response_pending = false;    
 
     if(payload.get_response_status() == tlm::TLM_OK_RESPONSE){
+    cout<<sc_time_stamp()<<"-[TB:] TLM protocol correctly implemented"<<endl;
+    cout<<sc_time_stamp()<<"-[TB:] Result is: " << endl;
       cout << mul_packet.risultato << endl;
     }
     

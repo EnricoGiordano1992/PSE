@@ -40,6 +40,9 @@ tlm::tlm_sync_enum mul_AT4::nb_transport_fw(tlm::tlm_generic_payload& trans, tlm
     return tlm::TLM_COMPLETED;
   }
 
+  cout<<"\t\t[MUL:] Received invocation of the nb_transport_fw primitive"<<endl;
+  cout<<"\t\t[MUL:] Activating the IOPROCESS"<<endl;
+
   pending_transaction = &trans;
   ioDataStruct = *((iostruct*) trans.get_data_ptr());
 
@@ -47,6 +50,7 @@ tlm::tlm_sync_enum mul_AT4::nb_transport_fw(tlm::tlm_generic_payload& trans, tlm
   //cout << name()<<" sending notify" << endl;
   io_event.notify();
   
+  cout<<"\t\t[MUL:] End of the nb_transport_fw primitive"<<endl;
   return tlm::TLM_UPDATED;
   
 }
@@ -64,6 +68,8 @@ void mul_AT4::IOPROCESS()
   while (true) {
     wait(io_event);
 
+    cout<<"\t\t[MUL:] IOPROCESS has been activated"<<endl;
+
     // When an io_event is notified, it means we must send the response back
     // to the initiator. We wait 100ns to model the delay required to
     // process the request.
@@ -71,14 +77,18 @@ void mul_AT4::IOPROCESS()
     wait(100, SC_NS);    
 
     if (pending_transaction->is_write()) {
+      cout<<"\t\t[MUL:] Invoking the multiplier_function to calculate the multiplication"<<endl;
       mul_function();
     }
+        else cout<<"\t\t[MUL:] Returning result "<<endl;
+
     pending_transaction->set_response_status(tlm::TLM_OK_RESPONSE);
 
     *((iostruct*) pending_transaction->get_data_ptr()) = ioDataStruct;
 
     tlm::tlm_phase phase = tlm::BEGIN_RESP;
 
+    cout<<"[TB:] Invoking the nb_transport_bw primitive - write"<<endl;
     target_socket->nb_transport_bw(*pending_transaction, phase, timing_annotation);
 
     pending_transaction = NULL;
@@ -91,6 +101,7 @@ void mul_AT4::IOPROCESS()
 //****************
 void mul_AT4:: mul_function()
 {
+  cout<<"\t\t[MUL:] Calculating multiplication_function ... "<<endl;
   ioDataStruct.risultato = ioDataStruct.numero_a * ioDataStruct.numero_b;
 
 }
