@@ -1,7 +1,6 @@
 /*
  * p_plant.cc
  *
- *      Author: Matteo Calabria
  */
 
 #include "p_plant.h"

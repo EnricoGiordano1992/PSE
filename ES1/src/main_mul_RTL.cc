@@ -11,8 +11,6 @@ int sc_main(int argc, char **argv)
   sc_signal<sc_lv<64> >   p_In_data2;
   sc_signal<sc_uint<1> >    p_In_enable;
   sc_signal<sc_uint<1> >    p_Out_enable;
-  sc_signal<sc_lv<64> >   p_Out_data1;
-  sc_signal<sc_lv<64> >   p_Out_data2;
   sc_signal<sc_lv<64> >   p_result;
   
   mul_RTL_testbench        i_src_RTL("src_RTL");             // source module

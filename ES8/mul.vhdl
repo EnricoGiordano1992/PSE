@@ -9,7 +9,7 @@ PACKAGE mul_pack IS
   USE IEEE.std_logic_1164.ALL;
   USE WORK.mul_pack.ALL;
   use ieee.numeric_std.all;
-  
+
   --definisco l'entità MUL
   entity mul is
     port (
@@ -68,14 +68,38 @@ end mul;
      begin
        case status is
 	      when SR =>
-	        for i in 0 to 64 loop
+	        for i in 0 to 63 loop 
 	           out_result(i) <= '0';
-	        end loop;
+          end loop;
+	        for i in 0 to 127 loop 
+	           mantissa_tot(i) := '0';
+          end loop;
+	        for i in 0 to 127 loop 
+	           mantissa1(i) := '0';
+          end loop;
+	        for i in 0 to 127 loop 
+	           mantissa2(i) := '0';
+          end loop;
+	        for i in 0 to 63 loop 
+	           buff(i) := '0';
+          end loop;
+	        for i in 0 to SIZE-1 loop 
+	           exp_tot(i) := '0';
+          end loop;
+	        for i in 0 to SIZE-1 loop 
+	           exp1(i) := '0';
+          end loop;
+	        for i in 0 to SIZE-1 loop 
+	           exp2(i) := '0';
+          end loop;
+          
+          counter := to_unsigned(0, 33);
+          
 
 	      when S0 =>
-	        for i in 0 to 64 loop
+	        for i in 0 to 63 loop 
 	           out_result(i) <= '0';
-	        end loop;
+          end loop;
 	        
 	      when S0I =>
 	        vcl_number_a := number_a;
@@ -94,18 +118,14 @@ end mul;
 	        sign2 := number_b(63);
 	        
 	        counter := to_unsigned(0, 33);
-
-	        for i in 0 to 127 loop
- 	          mantissa_tot(i) := '0';
-	        end loop;
 	        
 	      WHEN S1 =>
 	        --magic cast
-	        exp_tot := std_logic_vector(to_unsigned(to_integer(unsigned(exp1)) + to_integer(unsigned(exp2)), SIZE));
+	        exp_tot := std_logic_vector((unsigned(exp1)) + (unsigned(exp2)));
 	        
 	        
 	      WHEN S2 =>
-	        exp_tot := std_logic_vector(to_unsigned(to_integer(unsigned(exp_tot)) - 1023, SIZE));
+	        exp_tot := std_logic_vector((unsigned(exp_tot) - 1023));
         
         
 	      WHEN S3 =>
@@ -143,6 +163,7 @@ end mul;
 		    if(unsigned(exp_tot) = 0 or unsigned(mantissa_tot) = 0) then
 		      error <= '1';
 			end if;
+
 		          		          
 		  WHEN S7 =>
 		    if(unsigned(mantissa_tot(127 downto 105)) = 0 and mantissa_tot(104) = '1') then
@@ -162,7 +183,7 @@ end mul;
 		  WHEN S9 =>
 		    result_tot(63) := sign_tot;
 		    result_tot(62 downto 52) := exp_tot(10 downto 0);
-		    result_tot(51 downto 0) := mantissa_tot(104 downto 53);  --prima era downto 52
+		    result_tot(51 downto 0) := mantissa_tot(103 downto 52);  --prima era downto 52
 		    out_result <= result_tot;
 		    result_isready <= '1';
 	          
@@ -181,10 +202,7 @@ end mul;
           
           case next_status is
             when SR =>
-
-     	        for i in 0 to 64 loop
-                out_result(0) <= '0';
-              end loop;
+                next_status <= S0;            	 
               
             when S0 =>
               if(isready = '1') then
@@ -213,7 +231,11 @@ end mul;
                 next_status <= S3;
 
             when S4 =>
+              if(normalizzato = '1') then
+                  next_status <= S8;
+              else
                 next_status <= S5;
+              end if;
 
             when S5 =>
                 if(error = '1') then
@@ -221,7 +243,7 @@ end mul;
                 else
                   next_status <= S7;
                 end if;
-                  
+            
                   
             when S7 =>
               if(normalizzato = '1') then
