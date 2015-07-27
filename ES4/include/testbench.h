@@ -1,7 +1,7 @@
 /*
  * testbench.h
  *
- *      Author: Matteo Calabria
+ *     
  */
 
 #ifndef TESTBENCH_H_

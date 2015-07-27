@@ -44,10 +44,10 @@ int sc_main(int argc, char* argv[]) {
     //-----TDF Modules-----
     controller_err_istance.r_input(r_in);
     controller_err_istance.y_input(y_out);
-    controller_istance.k_out(k_t);
-
     controller_err_istance.err_out(errore);
+
     controller_istance.err_in(errore);   
+    controller_istance.k_out(k_t);
 
     physical_plant_istance.k_input(k_t);
     physical_plant_istance.y_out(y_out);
@@ -58,7 +58,15 @@ int sc_main(int argc, char* argv[]) {
     //-----------------------Traces Here----------------------
 
     //-----------------------Start Here-----------------------
-    sc_core::sc_start();
+	sca_util::sca_trace_file* atf = sca_util::sca_create_tabular_trace_file("execution.log");
+	sca_util::sca_trace(atf, r_in   , "r");
+	sca_util::sca_trace(atf, y_out   , "y");
+
+	
+	sc_core::sc_start();
+	
+	//sca_util::sca_close_vcd_trace_file(atf);
+	sca_util::sca_close_tabular_trace_file(atf);
     //--------------------Close Traces Here-------------------
 
     return 0;

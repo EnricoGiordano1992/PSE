@@ -1,7 +1,7 @@
 /*
  * controller.cc
  *
- *      Author: Matteo Calabria
+ * 
  */
 
 #include "controller.h"

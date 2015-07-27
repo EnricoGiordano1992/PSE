@@ -1,81 +1,50 @@
-# Some notes:
-#	In order to run correctly this Makefile, you have to set this variables:
-SYSTEMC_DIR=$$SYSTEMC_HOME
-SCAMS_DIR=$$SCAMS_HOME
-SCAMS_INC   = $(SCAMS_DIR)/include
-SCAMS_LIB   = $(SCAMS_DIR)/lib-linux64
-SYSTEMC_INC = $(SYSTEMC_DIR)/include
-SYSTEMC_LIB = $(SYSTEMC_DIR)/lib-linux64
-#
-#	So, you need to install both SystemC and SystemC-AMS.
-#	Good Luck!
+SYSTEMC=$$SYSTEMC_HOME
+SYSTEMC_AMS=$$SCAMS_HOME
 
-CXX        = g++
-LD         = g++
-RM         = rm -rf
-CXXFLAGS   = -c -ansi
+
+#SYSC_LIB=$(SYSTEMC)/lib-linux64
+#SYSC_AMS_LIB=$(SYSTEMC_AMS)/lib-linux64
+SYSTEMC=/home/enrico/systemc-2.3.1
+SYSTEMC_AMS=/home/enrico/systemc-ams-2.0_beta1
+
+SYSC_LIB=$(SYSTEMC)/lib-linux64
+SYSC_AMS_LIB=$(SYSTEMC_AMS)/lib-linux
+
+INCDIR= -I$(SYSTEMC)/include -I$(SYSTEMC_AMS)/include -I./inc/ -I./include/
+LIBDIR= -L$(SYSC_LIB) -L$(SYSC_AMS_LIB)
+LIBS= -lsystemc-ams -lsystemc
+
 
 EXECUTABLE=./bin/es4.x
 
-INCS =	-I $(SCAMS_INC) \
-		-I $(SYSTEMC_INC)\
-	-I./include/\
-	-I.
-
-LIBS =	-L $(SYSTEMC_LIB) \
-		-L $(SCAMS_LIB) \
-	 	-lsystemc-ams \
-	 	-lsystemc \
-	 	-lm \
-
-OBJS =     ./obj/testbench.o \
-	   ./obj/p_plant.o \
-	   ./obj/controller.o \
-	   ./obj/controller_err.o \
-	   ./obj/main.o
+CXX=g++ -O3 -m32
+CFLAGS= -c
+LD=g++
 
 all: $(EXECUTABLE)
 
-install: all
+clean:
+	@echo Cleaning
+	@rm -f obj/*.o *~
+	@rm -f $(EXECUTABLE)
 
-$(EXECUTABLE): $(OBJS)
-	@echo Linking $@
-	@$(LD) $(LDFLAGS) -o $@ $^ $(LIBS)
-	
-#------------------------------------------------------------
-#---------------------------Main-----------------------------
-obj/main.o: src/main.cc
-	@echo Compiling $@
-	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
-
-#------------------------------------------------------------
-#--------------------TDF Modules-----------------------------
-
-
-obj/testbench.o: src/testbench.cc
-	@echo Compiling $@
-	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
+$(EXECUTABLE): obj/main.o obj/controller.o obj/p_plant.o obj/controller_err.o obj/testbench.o
+	@ $(LD) -o $@ $(INCDIR) $(LIBDIR) obj/*.o $(LIBS)
 
 obj/controller.o: src/controller.cc
-	@echo Compiling $@
-	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
+	@ $(CXX) $(CFLAGS) -o $@ $(INCDIR) $(LIBDIR) $(LIBS) $<
 
 obj/controller_err.o: src/controller_err.cc
-	@echo Compiling $@
-	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
+	@ $(CXX) $(CFLAGS) -o $@ $(INCDIR) $(LIBDIR) $(LIBS) $<
+
+obj/main.o: src/main.cc 
+	@ $(CXX) $(CFLAGS) -o $@ $(INCDIR) $(LIBDIR) $(LIBS) $<
 
 obj/p_plant.o: src/p_plant.cc
-	@echo Compiling $@
-	@$(CXX) $(DEBUG) $(CXXFLAGS) $(INCS) -o $@ $<
+	@ $(CXX) $(CFLAGS) -o $@ $(INCDIR) $(LIBDIR) $(LIBS) $<
+
+obj/testbench.o: src/testbench.cc
+	@ $(CXX) $(CFLAGS) -o $@ $(INCDIR) $(LIBDIR) $(LIBS) $<
 
 
-
-clean:
-	@echo "Cleaning..."
-	@rm -rf obj/*.o
-	@rm -rf *.x
-	@rm -rf *.vcd
-	@rm -rf $(EXECUTABLE)
-	@echo "Done!"
-
-.PHONY: all clean install
+.PHONY: all clean	
