@@ -178,7 +178,7 @@ end mul;
 		    end if;
 		      
 		  WHEN S8 =>
-		    sign_tot := sign1 and sign2;
+		    sign_tot := sign1 xor sign2;
 		      
 		  WHEN S9 =>
 		    result_tot(63) := sign_tot;
