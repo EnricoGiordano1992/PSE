@@ -19,8 +19,8 @@ EXECUTABLE=./bin/platform.x
 
 INCS =	-I $(SCAMS_INC) \
 		-I $(SYSTEMC_INC)\
-	-I./include/\
-	-I.
+		-I./include/\
+		-I.
 
 LIBS =	-L $(SYSTEMC_LIB) \
 		-L $(SCAMS_LIB) \

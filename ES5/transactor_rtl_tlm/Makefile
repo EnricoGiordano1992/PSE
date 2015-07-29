@@ -1,9 +1,6 @@
 # Some notes:
 #	In order to run correctly this Makefile, you have to set this variables:
 SYSTEMC_DIR=$$SYSTEMC_HOME
-SCAMS_DIR=$$SCAMS_HOME
-SCAMS_INC   = $(SCAMS_DIR)/include
-SCAMS_LIB   = $(SCAMS_DIR)/lib-linux64
 SYSTEMC_INC = $(SYSTEMC_DIR)/include
 SYSTEMC_LIB = $(SYSTEMC_DIR)/lib-linux64
 #
@@ -17,14 +14,12 @@ CXXFLAGS   = -c -ansi
 
 EXECUTABLE=./bin/es7.x
 
-INCS =	-I $(SCAMS_INC) \
+INCS =	\
 		-I $(SYSTEMC_INC)\
 	-I./include/\
 	-I.
 
 LIBS =	-L $(SYSTEMC_LIB) \
-		-L $(SCAMS_LIB) \
-	 	-lsystemc-ams \
 	 	-lsystemc \
 	 	-lm \
 

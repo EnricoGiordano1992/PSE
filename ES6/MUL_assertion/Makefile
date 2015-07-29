@@ -3,8 +3,8 @@ ABSTRACTION_LEVEL=RTL
 
 EXECUTABLE=bin/$(DESIGN_NAME)_$(ABSTRACTION_LEVEL).x
 
-#SYSTEMC=$$SYSTEMC_HOME
-SYSTEMC=/usr/local/systemc-2.3.0
+SYSTEMC=$$SYSTEMC_HOME
+#SYSTEMC=/usr/local/systemc-2.3.0
 
 
 INCDIR = -I./include/ -I. -I$(SYSTEMC)/include/

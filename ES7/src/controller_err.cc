@@ -1,7 +1,7 @@
 /*
  * controller_err.cc
  *
- *      Author: Matteo Calabria
+ *
  */
 
 #include "controller_err.h"

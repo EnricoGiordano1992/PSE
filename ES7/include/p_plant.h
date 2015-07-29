@@ -1,7 +1,7 @@
 /*
  * p_plant.h
  *
- *      Author: Matteo Calabria
+ *
  */
 
 #ifndef P_PLANT_H_

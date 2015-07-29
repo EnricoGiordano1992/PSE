@@ -1,11 +1,14 @@
-SYSTEMC=$$SYSTEMC_HOME
-SYSTEMC_AMS=$$SCAMS_HOME
+#SYSTEMC=$$SYSTEMC_HOME
+#SYSTEMC_AMS=$$SCAMS_HOME
 
 
 #SYSC_LIB=$(SYSTEMC)/lib-linux64
 #SYSC_AMS_LIB=$(SYSTEMC_AMS)/lib-linux64
-SYSTEMC=/home/enrico/systemc-2.3.1
-SYSTEMC_AMS=/home/enrico/systemc-ams-2.0_beta1
+#SYSTEMC=/home/enrico/systemc-2.3.1
+#SYSTEMC_AMS=/home/enrico/systemc-ams-2.0_beta1
+
+SYSTEMC=$$SYSTEMC_HOME
+SYSTEMC_AMS=$$SCAMS_HOME
 
 SYSC_LIB=$(SYSTEMC)/lib-linux64
 SYSC_AMS_LIB=$(SYSTEMC_AMS)/lib-linux

@@ -1,7 +1,7 @@
 /*
  * controller.h
  *
- *      Author: Matteo Calabria
+
  */
 
 #ifndef CONTROLLER_ERR_H_
@@ -47,4 +47,4 @@ public:
 
 };
 
-#endif /* CONTROLLER_H_ */
+#endif /* CONTROLLER_ERR_H_ */

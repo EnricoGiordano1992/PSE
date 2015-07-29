@@ -1,7 +1,7 @@
 /*
  * p_plant.h
  *
- *      Author: Matteo Calabria
+
  */
 
 #ifndef P_PLANT_H_
@@ -20,7 +20,6 @@ public:
 	sca_tdf::sca_in<double> k_input;
 
 	sca_tdf::sca_out<double> y_out;
-
 
 
 	void set_attributes ();
